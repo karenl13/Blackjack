@@ -35,10 +35,12 @@ def play():
         print(f"Your score: {score}")
 
         if score == 21:
-            print("Blackjack! You win!\n Game Over")
+            print("Blackjack! You win!\nGame Over")
+            play_again()
             break
         elif score > 21:
             print("Bust! You lose! \nGame Over")
+            play_again()
             break
 
         # Check if player wants to hit or stand
@@ -47,11 +49,19 @@ def play():
             player_hand.add_card(deck.cards.pop())
         elif action == 'stand':
             print("Final hand:", player_hand)
-            print("Final score:", player_hand.calculate_score(ace_high_values),"\nGame Over")
+            print("Final score:", player_hand.calculate_score(ace_high_values))
+            play_again()
             break
         else:
             print("Invalid input. Please type 'hit' or 'stand'.")
 
+
+def play_again():
+    play_again = input("Do you want to play again? (yes/no): ").strip().lower()
+    if play_again != 'yes':
+        print("Game Over")
+    else:
+        play()
 
 if __name__ == '__main__':
     play()
