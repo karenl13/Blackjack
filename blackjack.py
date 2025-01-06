@@ -7,8 +7,8 @@ def play():
     deck = Deck()
     player_hand = Hand()
 
-    player_hand.add_hand(deck.cards.pop)
-    player_hand.add_hand(deck.cards.pop)
+    player_hand.add_card(deck.cards.pop())
+    player_hand.add_card(deck.cards.pop())
 
     while True:
         print(f"Your hand: {player_hand}")
@@ -33,7 +33,7 @@ def play():
 
         # Calculate the score based on player choices for Aces
         ace_high = all(ace_high_values)  # Use the collected Ace values
-        print(f"Your score: {player_hand.calculate_score(ace_high)}")
+        print(f"Your score: {player_hand.calculate_score(ace_high_values)}")
 
         # Check if player wants to hit or stand
         action = input("Do you want to 'hit' or 'stand'? ").strip().lower()
@@ -41,7 +41,7 @@ def play():
             player_hand.add_card(deck.cards.pop())
         elif action == 'stand':
             print("Final hand:", player_hand)
-            print("Final score:", player_hand.calculate_score(ace_high))
+            print("Final score:", player_hand.calculate_score(ace_high_values))
             break
         else:
             print("Invalid input. Please type 'hit' or 'stand'.")

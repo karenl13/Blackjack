@@ -31,17 +31,17 @@ class HandTestCase(unittest.TestCase):
     def test_calculate_score_no_ace(self):
         self.hand.add_card(Card("5", "Hearts"))
         self.hand.add_card(Card("10", "Diamonds"))
-        self.assertEqual(self.hand.calculate_score(ace_value=True), 15)
+        self.assertEqual(self.hand.calculate_score(ace_high=True), 15)
 
     def test_calculate_score_with_ace_high(self):
         self.hand.add_card(Card("Ace", "Hearts"))
         self.hand.add_card(Card("10", "Diamonds"))
-        self.assertEqual(self.hand.calculate_score(ace_value=True), 21)
+        self.assertEqual(self.hand.calculate_score(ace_high=True), 21)
 
     def test_calculate_score_with_ace_low(self):
         self.hand.add_card(Card("Ace", "Hearts"))
         self.hand.add_card(Card("10", "Diamonds"))
-        self.assertEqual(self.hand.calculate_score(ace_value=False), 11)
+        self.assertEqual(self.hand.calculate_score(ace_high=False), 11)
 
 if __name__ == 'main':
     unittest.main()

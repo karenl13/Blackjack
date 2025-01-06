@@ -4,7 +4,7 @@ class Card:
         self.suit = suit
 
     def __str__(self):
-        return f"{self.rank} of {self.suit}"
+        return f"{self.value} of {self.suit}"
 
 class Deck:
     def __init__(self):

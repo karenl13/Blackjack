@@ -5,19 +5,16 @@ class Hand:
     def add_card(self, card):
         self.cards.append(card)
 
-    def calculate_score(self, ace_high = True):
+    def calculate_score(self, ace_inputs):
         total_score = 0
-        aces = 0
+        ace_index = 0
 
         for card in self.cards:
-            if card.value in ["Jack, Queen", "King"]:
+            if card.value in ["Jack", "Queen", "King"]:
                 total_score += 10
             elif card.value == "Ace":
-                aces +=1
-                if ace_high:
-                    total_score += 11
-                else:
-                    total_score += 1
+                total_score += 11 if ace_inputs[ace_index] else 1
+                ace_index += 1
             else:
                 total_score += int(card.value)
 
@@ -30,4 +27,4 @@ if __name__ == "__main__":
 
     hand = Hand()
     print(f"Hand: {hand}")
-    print(f"Score: {hand.calculate_score(ace_high = True)}")
+    print(f"Score: {hand.calculate_score(ace_inputs=[])}")
