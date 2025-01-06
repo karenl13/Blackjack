@@ -31,9 +31,15 @@ def play():
                     except ValueError:
                         print("Invalid input. Please enter a number.")
 
-        # Calculate the score based on player choices for Aces
-        ace_high = all(ace_high_values)  # Use the collected Ace values
-        print(f"Your score: {player_hand.calculate_score(ace_high_values)}")
+        score = player_hand.calculate_score(ace_high_values)
+        print(f"Your score: {score}")
+
+        if score == 21:
+            print("Blackjack! You win!\n Game Over")
+            break
+        elif score > 21:
+            print("Bust! You lose! \nGame Over")
+            break
 
         # Check if player wants to hit or stand
         action = input("Do you want to 'hit' or 'stand'? ").strip().lower()
@@ -41,7 +47,7 @@ def play():
             player_hand.add_card(deck.cards.pop())
         elif action == 'stand':
             print("Final hand:", player_hand)
-            print("Final score:", player_hand.calculate_score(ace_high_values))
+            print("Final score:", player_hand.calculate_score(ace_high_values),"\nGame Over")
             break
         else:
             print("Invalid input. Please type 'hit' or 'stand'.")
