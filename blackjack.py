@@ -21,10 +21,10 @@ def play():
                     try:
                         user_input = int(input(f"Would you like {card} to be 1 or 11? Enter the number: "))
                         if user_input == 1:
-                            ace_high_values.append(False)  # False means Ace treated as 1
+                            ace_high_values.append(False)  # Ace is 1
                             break
                         elif user_input == 11:
-                            ace_high_values.append(True)  # True means Ace treated as 11
+                            ace_high_values.append(True)  # Ace is 11
                             break
                         else:
                             print("Invalid choice. Please enter 1 or 11.")
@@ -57,8 +57,8 @@ def play():
 
 
 def play_again():
-    play_again = input("Do you want to play again? (yes/no): ").strip().lower()
-    if play_again != 'yes':
+    play_again = input("Do you want to play again? (y/n): ")
+    if play_again != 'y':
         print("Game Over")
     else:
         play()

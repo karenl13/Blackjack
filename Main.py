@@ -38,6 +38,11 @@ class Main(QMainWindow):
         self.message_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.message_label)
 
+        # Total Games Won and Lost
+        self.stats_label = QLabel("Games Won: 0 | Games Lost: 0")
+        self.stats_label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.stats_label)
+
         # Buttons
         self.hit_button = QPushButton("Hit")
         self.stand_button = QPushButton("Stand")
@@ -106,10 +111,18 @@ class Main(QMainWindow):
 
         if score == 21:
             self.message_label.setText("Blackjack! You win!")
+            self.games_won += 1
+            self.update_stats()
             self.end_game()
         elif score > 21:
             self.message_label.setText("Bust! You lose!")
+            self.games_lost += 1
+            self.update_stats()
             self.end_game()
+
+    def update_stats(self):
+        """Update the stats display."""
+        self.stats_label.setText(f"Games Won: {self.games_won} | Games Lost: {self.games_lost}")
 
     def hit(self):
         """Add a card to the player's hand."""
@@ -119,7 +132,9 @@ class Main(QMainWindow):
 
     def stand(self):
         """End the player's turn."""
-        self.message_label.setText("You win! Game Over.")
+        score = self.player_hand.calculate_score(self.ace_high_values)
+        self.player_score_label.setText(f"Your Final Score: {score}")
+        self.message_label.setText("Close... Game Over.")
         self.end_game()
 
     def end_game(self):
