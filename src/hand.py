@@ -23,8 +23,4 @@ class Hand:
         return ", ".join(str(card) for card in self.cards)
 
 if __name__ == "__main__":
-    from deck import Card
-
-    hand = Hand()
-    print(f"Hand: {hand}")
-    print(f"Score: {hand.calculate_score(ace_inputs=[])}")
+    pass

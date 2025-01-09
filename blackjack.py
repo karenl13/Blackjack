@@ -1,67 +1,86 @@
 from src.deck import Deck
 from src.hand import Hand
+from src.player import Player, Computer
 
 
 def play():
-    print('Blackjack game:')
+    print('Welcome to solo blackjack! Get as close to 21 as you can')
     deck = Deck()
-    player_hand = Hand()
+    player = Player()
 
-    player_hand.add_card(deck.cards.pop())
-    player_hand.add_card(deck.cards.pop())
+    player.hand.add_card(deck.cards.pop())
+    player.hand.add_card(deck.cards.pop())
 
-    while True:
-        print(f"Your hand: {player_hand}")
+    player.take_turn(deck)
 
-        # Ask for Ace value choice for each Ace in the hand
-        ace_high_values = []
-        for card in player_hand.cards:
-            if card.value == "Ace":
-                while True:
-                    try:
-                        user_input = int(input(f"Would you like {card} to be 1 or 11? Enter the number: "))
-                        if user_input == 1:
-                            ace_high_values.append(False)  # Ace is 1
-                            break
-                        elif user_input == 11:
-                            ace_high_values.append(True)  # Ace is 11
-                            break
-                        else:
-                            print("Invalid choice. Please enter 1 or 11.")
-                    except ValueError:
-                        print("Invalid input. Please enter a number.")
-
-        score = player_hand.calculate_score(ace_high_values)
-        print(f"Your score: {score}")
-
-        if score == 21:
-            print("Blackjack! You win!\nGame Over")
-            play_again()
-            break
-        elif score > 21:
-            print("Bust! You lose! \nGame Over")
-            play_again()
-            break
-
-        # Check if player wants to hit or stand
-        action = input("Do you want to 'hit' or 'stand'? ").strip().lower()
-        if action == 'hit':
-            player_hand.add_card(deck.cards.pop())
-        elif action == 'stand':
-            print("Final hand:", player_hand)
-            print("Final score:", player_hand.calculate_score(ace_high_values))
-            play_again()
-            break
-        else:
-            print("Invalid input. Please type 'hit' or 'stand'.")
-
-
-def play_again():
-    play_again = input("Do you want to play again? (y/n): ")
-    if play_again != 'y':
-        print("Game Over")
+    print(f"Your Final Score: {player.score}")
+    if player.score > 21:
+        print("Bust! You lose! \nGame Over")
+    elif player.score == 21:
+        print("Blackjack! You win!\nGame Over")
     else:
-        play()
+        print("Game Over. Better luck next time!")
+    
+    play_again(play, play_against_computer)
+    
+
+def play_against_computer():
+    print('Welcome, you will be competing against a computer!')
+    deck = Deck()
+
+    player = Player()
+    computer = Computer()
+
+    player.hand.add_card(deck.cards.pop())
+    player.hand.add_card(deck.cards.pop())
+    computer.hand.add_card(deck.cards.pop())
+    computer.hand.add_card(deck.cards.pop())
+
+    player.take_turn(deck)
+    computer.take_turn(deck)
+
+    print(f"Your Final Score: {player.score}")
+    print(f"Computer's Final Score: {computer.score}")
+
+    if player.score > 21:
+        print("You busted! computer wins!")
+    elif computer.score > 21:
+        print("Computer busted! You win!")
+    elif player.score == 21 and computer.score != 21:
+        print("Blackjack! You win!")
+    elif computer.score == 21 and player.score != 21:
+        print("Computer hits Blackjack! computer wins!")
+    elif player.score > computer.score:
+        print("You win!")
+    elif computer.score > player.score:
+        print("Computer wins!")
+    else:
+        print("It's a tie!")
+
+    play_again(play_against_computer)
+
+def play_again(method, switch):
+    while True:
+        mode = input("Do you want to (1) Play again (2) Switch modes (3) Exit (1/2/3) ")
+        if mode == '1':
+            method()
+            break
+        elif mode == '2':
+            switch()
+            break
+        elif mode == '3':
+            print('Goodbye!')
+            break
+        print("Invalid. Please enter '1' or '2' or '3'.")
 
 if __name__ == '__main__':
-    play()
+    print('Blackjack game:')
+    while True:
+        mode = input("Would you like to (1) Play against computer (2) Play solo? (1/2)")
+        if mode == '1':
+            play_against_computer()
+            break
+        elif mode == '2':
+            play()
+            break
+        print("Invalid. Please enter '1' or '2'.")
