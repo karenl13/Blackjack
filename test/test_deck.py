@@ -1,6 +1,7 @@
 import unittest
 from src.deck import Deck, Card
 from src.hand import Hand
+from src.player import Player, Computer
 
 class DeckTestCase(unittest.TestCase):
 
@@ -53,7 +54,7 @@ class HandTestCase(unittest.TestCase):
 
     def test_calculate_score_with_ace_high(self):
         """
-        Test the Ace in a a hand is treated as 11.
+        Test the Ace in a hand is treated as 11.
             Checks score reflects 11 points added.
         """
         self.hand.add_card(Card("Ace", "Hearts"))
@@ -63,7 +64,7 @@ class HandTestCase(unittest.TestCase):
 
     def test_calculate_score_with_ace_low(self):
         """
-        Test the Ace in a a hand is treated as 1.
+        Test the Ace in a hand is treated as 1.
             Checks score reflects 1 points added.
         """
         self.hand.add_card(Card("Ace", "Hearts"))
@@ -73,7 +74,7 @@ class HandTestCase(unittest.TestCase):
     
     def test_calculate_score_multiple_aces(self):
         """
-        Test the Ace in a a hand is treated as 11 and 1.
+        Test the Ace in a hand is treated as 11 and 1.
             Checks score reflects 11 and 1 points added.
         """
         self.hand.add_card(Card("Ace", "Hearts"))
@@ -81,6 +82,72 @@ class HandTestCase(unittest.TestCase):
         self.hand.add_card(Card("9", "Diamonds"))
         ace_inputs = [True, False]  # First Ace is 11, second is 1
         self.assertEqual(self.hand.calculate_score(ace_inputs), 21)
+
+class PlayerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.player = Player()
+
+    def test_initial_hand_empty(self):
+        """"
+        Test the hand is empty upon start of round.
+        """
+        self.assertEqual(len(self.player.hand.cards), 0, "Player's initial hand should be empty.")
+
+    def test_add_cards_to_hand(self):
+        """
+        Test when you draw cards it is added into the player's hand.
+        """
+        self.player.hand.add_card(Card("10", "Diamonds"))
+        self.player.hand.add_card(Card("5", "Hearts"))
+        self.assertEqual(len(self.player.hand.cards), 2, "Player's hand should contain 2 cards.")
+
+class ComputerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.computer = Computer()
+
+    def test_computer_hits_under_18(self):
+        """
+        Test computer hits new card if score is under 18
+        """
+        self.computer.hand.add_card(Card("10", "Diamonds"))
+        self.computer.hand.add_card(Card("6", "Spades"))
+        deck = Deck()
+        self.computer.take_turn(deck)
+        self.assertEqual(len(self.computer.hand.cards), 3)
+
+    def test_computer_stands_at_18(self):
+        """
+        Test computer stops drawing cards at score 18
+        """
+        self.computer.hand.add_card(Card("10", "Diamonds"))
+        self.computer.hand.add_card(Card("8", "Spades"))
+        deck = Deck()
+        self.computer.take_turn(deck)
+        self.assertEqual(len(self.computer.hand.cards), 2)
+    
+    def test_computer_stands_at_greater_than_18(self):
+        """
+        Test computer stops drawing cards after score exceeds 18
+        """
+        self.computer.hand.add_card(Card("10", "Diamonds"))
+        self.computer.hand.add_card(Card("10", "Spades"))
+        deck = Deck()
+        self.computer.take_turn(deck)
+        self.assertEqual(len(self.computer.hand.cards), 2)
+    
+    def test_computer_changes_ace_dynamically(self):
+        """
+        Test computer does not exceed score of 21 while choosing the values of the aces in the hand
+        """
+        self.computer.hand.add_card(Card("Ace", "Diamonds"))
+        self.computer.hand.add_card(Card("Ace", "Spades"))
+        self.computer.hand.add_card(Card("9", "Hearts"))
+        deck = Deck()
+        self.computer.take_turn(deck)
+        # First Ace should be taken as 11 and second ace as 1, otherwise the score exceeds 21
+        # The loop breaks at third card because score is now greater than 18
+        self.assertEqual(self.computer.score, 21)
+
 
 if __name__ == 'main':
     unittest.main()
